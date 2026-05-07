@@ -26,6 +26,17 @@ public class ClientesController {
                 .ok(clientesService.listar(filtro));
     }
 
+    @GetMapping("/listar/{id}")
+    public ResponseEntity<Clientes> listarPorId(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(clientesService.listarPorId(id));
+        } catch (RuntimeException e){
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
     @PostMapping("/criar")
     public ResponseEntity<Clientes> criar(
             @RequestBody ClientesRequestDto cliente) {

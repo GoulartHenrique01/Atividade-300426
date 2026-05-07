@@ -4,7 +4,7 @@ public class ClientesFiltroDto {
     private Long id;
     private String nome;
     private String email;
-    private int idade;
+    private Integer idade;
 
     public Long getId() {
         return id;
@@ -34,7 +34,7 @@ public class ClientesFiltroDto {
         return idade;
     }
 
-    public void setIdade(int idade) {
+    public void setIdade(Integer idade) {
         this.idade = idade;
     }
 }

@@ -4,9 +4,13 @@ import br.com.senac.clientes_api.dtos.ClientesFiltroDto;
 import br.com.senac.clientes_api.dtos.ClientesRequestDto;
 import br.com.senac.clientes_api.entidades.Clientes;
 import br.com.senac.clientes_api.repositorios.ClientesRepositorio;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientesService {
@@ -14,6 +18,14 @@ public class ClientesService {
 
     public ClientesService(ClientesRepositorio clienteRepositorio) {
         this.clienteRepositorio = clienteRepositorio;
+    }
+
+    @GetMapping("/listar")
+    public List<Clientes> listar(ClientesFiltroDto filtro){
+        if (filtro.getNome() != null){
+            return clienteRepositorio.findByNomeContaining(filtro.getNome());
+        }
+        return clienteRepositorio.findAll();
     }
 
     public Clientes atualizar(Long id,
@@ -25,27 +37,6 @@ public class ClientesService {
         }
         throw new RuntimeException("Usuário não encontrado");
     }
-
-    public List<Clientes> listar(ClientesFiltroDto filtro) {
-
-        if (filtro.getId() != null) {
-            return clienteRepositorio.findById(filtro.getId())
-                    .map(List::of)
-                    .orElse(List.of());
-        }
-
-        if (filtro.getNome() != null) {
-            return clienteRepositorio
-                    .findByNomeContainingIgnoreCase(filtro.getNome());
-        }
-
-        if (filtro.getEmail() != null) {
-            return clienteRepositorio.findByEmail(filtro.getEmail());
-        }
-
-        return clienteRepositorio.findAll();
-    }
-
 
     public Clientes criar(ClientesRequestDto cliente){
         Clientes clientePersist = this.clientesRequestDtoParaClientes(cliente);
@@ -60,7 +51,14 @@ public class ClientesService {
         throw new RuntimeException("Cliente não encontrado");
     }
 
+    public Clientes listarPorId(Long id){
+        Optional<Clientes> retorno = clienteRepositorio.findById(id);
+        if(retorno.isPresent()){
+            return retorno.get();
+        }
 
+        throw new RuntimeException("Cliente nao encontrado");
+    }
 
 
 
