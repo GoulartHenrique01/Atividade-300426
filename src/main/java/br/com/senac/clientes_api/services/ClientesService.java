@@ -25,6 +25,13 @@ public class ClientesService {
         if (filtro.getNome() != null){
             return clienteRepositorio.findByNomeContaining(filtro.getNome());
         }
+        if (filtro.getEmail() != null){
+            return clienteRepositorio.findByEmailContaining(filtro.getEmail());
+        }
+        if (filtro.getIdade() > 0){
+            return clienteRepositorio.findByIdade(filtro.getIdade());
+        }
+
         return clienteRepositorio.findAll();
     }
 
