@@ -52,6 +52,7 @@ public class EnderecoService {
     public void deletar(Long id){
         if (enderecoRepositorio.existsById(id)){
             enderecoRepositorio.deleteById(id);
+            return;
         }
         throw new RuntimeException("Endereço não encontrado");
     }
