@@ -71,6 +71,7 @@ public class EnderecoService {
         saida.setCep(entrada.getCep());
         saida.setCidade(entrada.getCidade());
         saida.setEstado(entrada.getEstado());
+        saida.setNumero(entrada.getNumero());
         saida.setComplemento(entrada.getComplemento());
         return saida;
     }
