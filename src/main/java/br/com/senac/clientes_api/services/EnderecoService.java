@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EnderecoService {
@@ -30,6 +31,48 @@ public class EnderecoService {
             return enderecoRepositorio.findByCepContaining(filtro.getCep());
         }
         return enderecoRepositorio.findAll();
+    }
+
+    public Endereco atualizar(Long id,
+                              EnderecoRequestDto endereco){
+        if (enderecoRepositorio.existsById(id)){
+            Endereco enderecoPersist = this.enderecoRequestDtoParaEndereco(endereco);
+            enderecoPersist.setId(id);
+            return enderecoRepositorio.save(enderecoPersist);
+        }
+        throw new RuntimeException("Endereço não encontrado");
+    }
+
+    public Endereco criar(EnderecoRequestDto endereco){
+        Endereco enderecoPersist = this.enderecoRequestDtoParaEndereco(endereco);
+
+        return enderecoRepositorio.save(enderecoPersist);
+    }
+
+    public void deletar(Long id){
+        if (enderecoRepositorio.existsById(id)){
+            enderecoRepositorio.deleteById(id);
+        }
+        throw new RuntimeException("Endereço não encontrado");
+    }
+
+    public Endereco listarPorId(Long id){
+        Optional<Endereco> retorno = enderecoRepositorio.findById(id);
+        if(retorno.isPresent()){
+            return retorno.get();
+        }
+        throw new RuntimeException("Endereço não encontrado");
+    }
+
+    public Endereco enderecoRequestDtoParaEndereco(EnderecoRequestDto entrada){
+        Endereco saida = new Endereco();
+        saida.setRua(entrada.getRua());
+        saida.setBairro(entrada.getBairro());
+        saida.setCep(entrada.getCep());
+        saida.setCidade(entrada.getCidade());
+        saida.setEstado(entrada.getEstado());
+        saida.setComplemento(entrada.getComplemento());
+        return saida;
     }
 }
 
